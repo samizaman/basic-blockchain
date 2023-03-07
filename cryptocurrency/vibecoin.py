@@ -91,7 +91,7 @@ class Blockchain:
         self.transactions.append({'sender': sender,
                                   'receiver': receiver,
                                   'amount': amount})
-        # get the previous block
+        # get the previous block to figure out what's the current block in the chain and then add 1 to it
         previous_block = self.get_previous_block()
         # return the index of the previous block + 1
         return previous_block['index'] + 1
