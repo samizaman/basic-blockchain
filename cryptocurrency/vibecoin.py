@@ -19,6 +19,7 @@ class Blockchain:
         # create the genesis block / we put previous_hash in quotes because we will use SHA256 function from hashlib
         # library which can only accept encoded strings
         self.create_block(proof=1, previous_hash='0')
+        self.nodes = set()
 
     # since it's right after the mining of a block we will need to add the proof and previous_hash
     def create_block(self, proof, previous_hash):
@@ -95,6 +96,13 @@ class Blockchain:
         previous_block = self.get_previous_block()
         # return the index of the previous block + 1
         return previous_block['index'] + 1
+
+    # add a new node to the set of nodes
+    def add_node(self, address):
+        # ParseResult(scheme='http', netloc='127.0.0.1:5000', path='/', params='', query='', fragment='')
+        parsed_url = urlparse(address)
+        # parsed_url.netloc = '127.0.0.1:5000'
+        self.nodes.add(parsed_url.netloc)
 
 
 # Part 2 - Mining our Blockchain
