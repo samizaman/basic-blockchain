@@ -15,6 +15,7 @@ class Blockchain:
     def __init__(self):
         # chain is a list of blocks
         self.chain = []
+        self.transactions = []
         # create the genesis block / we put previous_hash in quotes because we will use SHA256 function from hashlib
         # library which can only accept encoded strings
         self.create_block(proof=1, previous_hash='0')
@@ -24,7 +25,11 @@ class Blockchain:
         block = {'index': len(self.chain) + 1,
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,
-                 'previous_hash': previous_hash}
+                 'previous_hash': previous_hash,
+                 'transactions': self.transactions}
+        # we are going to reset the list of transactions after we add them to the block because we don't want to add the
+        # same transactions to the next block
+        self.transactions = []
         self.chain.append(block)
         return block
 
@@ -80,6 +85,16 @@ class Blockchain:
             previous_block = block
             block_index += 1
         return True
+
+    # add a transaction to the list of transactions
+    def add_transaction(self, sender, receiver, amount):
+        self.transactions.append({'sender': sender,
+                                  'receiver': receiver,
+                                  'amount': amount})
+        # get the previous block
+        previous_block = self.get_previous_block()
+        # return the index of the previous block + 1
+        return previous_block['index'] + 1
 
 
 # Part 2 - Mining our Blockchain
