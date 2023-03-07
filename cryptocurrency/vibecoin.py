@@ -134,6 +134,9 @@ class Blockchain:
 app = Flask(__name__)
 # app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
+# Creating an address for the node on Port 5000
+node_address = str(uuid4()).replace('-', '')
+
 # Creating a Blockchain
 blockchain = Blockchain()
 
@@ -149,6 +152,8 @@ def mine_block():
     proof = blockchain.proof_of_work(previous_proof)
     # get the previous hash
     previous_hash = blockchain.hash(previous_block)
+    # add a transaction to the blockchain
+    blockchain.add_transaction(sender=node_address, receiver='Sami', amount=1)
     # create a new block
     block = blockchain.create_block(proof, previous_hash)
     # we are going to create a response
@@ -156,7 +161,8 @@ def mine_block():
                 'index': block['index'],
                 'timestamp': block['timestamp'],
                 'proof': block['proof'],
-                'previous_hash': block['previous_hash']}
+                'previous_hash': block['previous_hash'],
+                'transactions': block['transactions']}
     return jsonify(response), 200
 
 
